@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Country Code Filter Tool</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    #developerInfo {
+      text-align: center;
+      margin-bottom: 20px;
+      
+    }
+
+    h3 {
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    textarea, input {
+      background-color: #1e1e1e;
+      color: #ffffff;
+      border: 1px solid #444;
+      border-radius: 8px;
+      padding: 15px;
+      font-size: 16px;
+      width: 90%;
+      max-width: 600px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    .button-group {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      width: 90%;
+      max-width: 600px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      background-color: #2979ff;
+      color: white;
+      border: none;
+      padding: 12px 15px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+    }
+
+    button:hover {
+      background-color: #1565c0;
+    }
+
+    .copyAll {
+      background-color: #43a047;
+    }
+
+    .copyNext {
+      background-color: #ff9800;
+    }
+
+    .downloadBtn {
+      background-color: #8e24aa;
+      grid-column: span 2;
+    }
+
+    .copyAll:hover {
+      background-color: #2c6e1e;
+    }
+
+    .copyNext:hover {
+      background-color: #e65100;
+    }
+
+    .downloadBtn:hover {
+      background-color: #5c007a;
+    }
+
+    /* কাউন্টার টেক্সটের স্টাইল */
+    #counterDisplay {
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      color: #ffeb3b;
+      margin-bottom: 10px;
+      background: #1e1e1e;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      box-sizing: border-box;
+    }
+
+    /* আউটপুট বক্সের সাইজ ফিক্সড এবং স্ক্রল লজিক */
+    #output {
+      background-color: #1e1e1e;
+      color: #ffffff;
+      border: 1px solid #444;
+      padding: 10px;
+      width: 90%;
+      max-width: 600px;
+      border-radius: 8px;
+      height: 180px;       /* ৪টি আইটেম সুন্দরভাবে দেখানোর জন্য ফিক্সড হাইট */
+      max-height: 180px;   
+      box-sizing: border-box;
+      overflow-y: auto;    /* ৪টির বেশি হলে স্ক্রল হবে */
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* কপি হওয়া প্রতিটা নাম্বারের রো (Row) স্টাইল */
+    .history-item {
+      background-color: #151515;
+      border: 1px solid #2e7d32;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #4caf50;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .time-stamp {
+      font-size: 12px;
+      color: #888;
+    }
+
+    #copyStatus {
+      margin-top: 10px;
+      color: #4caf50;
+      font-size: 15px;
+      transition: opacity 0.5s ease-in-out;
+    }
+  </style>
+<script defer data-domain="gray-cindelyn-62.tiiny.site" src="https://analytics.tiiny.site/js/plausible.js"></script><script type="text/javascript" src="https://tiiny.host/ad-script.js"></script><script defer data-domain="gray-cindelyn-62.tiiny.site" src="https://analytics.tiiny.site/js/plausible.js"></script><script type="text/javascript" src="https://tiiny.host/ad-script.js"></script><script defer data-domain="numbercopy.tiiny.site" src="https://analytics.tiiny.site/js/plausible.js"></script><script type="text/javascript" src="https://tiiny.host/ad-script.js"></script><script defer data-domain="numbercopy.tiiny.site" src="https://analytics.tiiny.site/js/plausible.js"></script><script type="text/javascript" src="https://tiiny.host/ad-script.js"></script></head>
+<body>
+
+  <div id="developerInfo">
+    <p>👨‍💻 Channel Link : ➤  <a href="https://t.me/rdxsystem24" target="_blank" style="color: red;">RDX SYSTEM</a></p>
+  </div>
+
+  <h3>নাম্বার ইনপুট করো</h3>
+  <textarea id="numberInput" rows="12" placeholder="যেমন:966550159106 
+    966594818808"></textarea>
+
+  <h3>যে দেশের কোড বাদ দিতে হবে (যেমন: 966):</h3>
+  <input type="text" id="countryCode" placeholder="কোড লিখুন (যেমন: 966)" />
+
+  <div class="button-group">
+    <button onclick="filterAndDisplay()">ফিল্টার করুন</button>
+    <button class="copyAll" onclick="copyAll()">সব কপি করুন</button>
+    <button onclick="addPlusToNumbers()">+ যোগ করুন</button>
+    <button class="copyNext" onclick="copyNext()">পরেরটি কপি করুন</button>
+    <button class="downloadBtn" onclick="downloadTextFile()">ডাউনলোড করুন</button>
+  </div>
+
+  <div id="counterDisplay">REMAINING: 0</div>
+  
+  <div id="output"></div>
+  <div id="copyStatus"></div>
+
+  <script>
+    let copiedIndex = 0;
+    let resultLines = [];
+    let copiedHistory = []; // কপি করা নাম্বারের হিস্ট্রি রাখার জন্য
+
+    function filterAndDisplay() {
+      const input = document.getElementById('numberInput').value;
+      const countryCode = document.getElementById('countryCode').value.trim();
+      const lines = input.split('\n');
+
+      resultLines = lines
+        .map(line => line.trim())
+        .filter(line => line.length > 0)
+        .map(num => {
+          if (num.startsWith(countryCode)) {
+            return num.slice(countryCode.length);
+          }
+          return num;
+        });
+
+      copiedIndex = 0;
+      copiedHistory = []; // নতুন ফিল্টার করলে হিস্ট্রি রিসেট হবে
+      document.getElementById('output').innerHTML = ''; // বক্স খালি করা
+      updateCounter();
+    }
+
+    function addPlusToNumbers() {
+      resultLines = resultLines.map(num => num.startsWith('+') ? num : '+' + num);
+      showCopyStatus("✅ সব নাম্বারে '+' যোগ হয়েছে!");
+    }
+
+    function updateCounter() {
+      const counterDiv = document.getElementById('counterDisplay');
+      const remaining = resultLines.length - copiedIndex;
+      counterDiv.innerText = "REMAINING: " + (remaining >= 0 ? remaining : 0);
+    }
+
+    function showCopyStatus(message) {
+      const statusDiv = document.getElementById('copyStatus');
+      statusDiv.innerText = message;
+      statusDiv.style.opacity = 1;
+
+      setTimeout(() => {
+        statusDiv.style.opacity = 0;
+        statusDiv.innerText = '';
+      }, 2000);
+    }
+
+    async function copyAll() {
+      if (resultLines.length === 0) {
+        showCopyStatus("⚠️ কপি করার মতো কোনো নাম্বার নেই!");
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(resultLines.join('\n'));
+        showCopyStatus("✅ সব নাম্বার কপি হয়েছে!");
+      } catch (err) {
+        showCopyStatus("❌ কপি করা যায়নি!");
+      }
+    }
+
+    async function copyNext() {
+      if (copiedIndex >= resultLines.length) {
+        showCopyStatus("⚠️ সব নাম্বার কপি শেষ!");
+        return;
+      }
+
+      const numberToCopy = resultLines[copiedIndex];
+
+      try {
+        await navigator.clipboard.writeText(numberToCopy);
+        showCopyStatus("✅ কপি হয়েছে: " + numberToCopy);
+        
+        // বর্তমান সময় বের করার লজিক (স্ক্রিনশটের মতো)
+        const now = new Date();
+        const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        // নতুন কপি করা নাম্বারটি হিস্ট্রি লিস্টের প্রথমে পুশ করা
+        copiedHistory.unshift({ number: numberToCopy, time: timeString });
+        
+        // আউটপুট বক্সে হিস্ট্রি রেন্ডার করা
+        renderHistory();
+
+      } catch {
+        showCopyStatus("❌ কপি করতে সমস্যা হয়েছে!");
+      }
+
+      copiedIndex++;
+      updateCounter(); // কাউন্ট ১টি কমবে
+    }
+
+    function renderHistory() {
+      const outputDiv = document.getElementById('output');
+      
+      // হিস্ট্রি আইটেম তৈরি
+      outputDiv.innerHTML = copiedHistory.map(item => `
+        <div class="history-item">
+          <span>${item.number}</span>
+          <span class="time-stamp">${item.time}</span>
+        </div>
+      `).join('');
+
+      // ৪টির বেশি হলে অটোমেটিক নিচের দিকে স্ক্রল ধরে রাখবে যাতে লেটেস্টটা দেখা যায়
+      outputDiv.scrollTop = 0; 
+    }
+
+    function downloadTextFile() {
+      if (resultLines.length === 0) {
+        showCopyStatus("⚠️ ডাউনলোড করার মতো কোনো ডাটা নেই!");
+        return;
+      }
+
+      const textData = resultLines.join('\n');
+      const blob = new Blob([textData], { type: 'text/plain;charset=utf-8;' });
+      const link = document.createElement('a');
+      
+      link.href = URL.createObjectURL(blob);
+      link.download = 'filtered_numbers.txt';
+      link.style.display = 'none';
+      
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      showCopyStatus("📥 ফাইল ডাউনলোড শুরু হয়েছে!");
+    }
+  </script>
+
+</body>
+</html>
